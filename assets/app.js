@@ -1,4 +1,7 @@
 import './bootstrap.js';
+import '../vendor/twbs/bootstrap/dist/js/bootstrap.bundle.min.js';
+import '../vendor/twbs/bootstrap/dist/css/bootstrap.min.css';
+import '../vendor/twbs/bootstrap-icons/font/bootstrap-icons.min.css';
 /*
  * Welcome to your app's main JavaScript file!
  *
