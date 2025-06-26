@@ -1,0 +1,11 @@
+{% block title %}Edit comment{% endblock %}
+
+{% block body %}
+    <h1>Edit comment</h1>
+
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button type="submit">Save</button>
+        <a href="{{ path('app_post_show', {'id': comment.post.id}) }}">Cancel</a>
+    {{ form_end(form) }}
+{% endblock %}
