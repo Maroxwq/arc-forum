@@ -16,10 +16,6 @@ class PostForm extends AbstractType
         $builder
             ->add('title')
             ->add('content')
-            ->add('user', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'id',
-            ])
         ;
     }
 

@@ -18,7 +18,7 @@ final class PostController extends AbstractController
     public function index(PostRepository $postRepository): Response
     {
         return $this->render('post/index.html.twig', [
-            'posts' => $postRepository->findAll(),
+            'items' => $postRepository->findAllWithCommentCount(),
         ]);
     }
 
@@ -57,10 +57,14 @@ final class PostController extends AbstractController
         $form = $this->createForm(PostForm::class, $post);
         $form->handleRequest($request);
 
+        if ($post->getUser() !== $this->getUser()) {
+            return $this->redirectToRoute('app_post_index', [], Response::HTTP_SEE_OTHER);
+        }
+
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_post_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_post_show', ['id' => $post->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('post/edit.html.twig', [
@@ -69,13 +73,19 @@ final class PostController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_post_delete', methods: ['POST'])]
+    #[Route('/{id}/delete', name: 'app_post_delete', methods: ['POST'])]
     public function delete(Request $request, Post $post, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$post->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($post);
-            $entityManager->flush();
+        if ($post->getUser() !== $this->getUser()) {
+            return $this->redirectToRoute('app_post_index', [], Response::HTTP_SEE_OTHER);
         }
+        
+        if (!$this->isCsrfTokenValid('delete_post'.$post->getId(), $request->request->get('_token'))) {
+            return $this->redirectToRoute('app_post_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        $entityManager->remove($post);
+        $entityManager->flush();
 
         return $this->redirectToRoute('app_post_index', [], Response::HTTP_SEE_OTHER);
     }

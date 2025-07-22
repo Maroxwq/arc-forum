@@ -11,9 +11,18 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use App\Repository\CommentRepository;
 
 class CommentController extends AbstractController
 {
+    #[Route('/comments', name: 'comment_index', methods: ['GET'])]
+    public function index(CommentRepository $repo): Response
+    {
+        return $this->render('comment/index.html.twig', [
+            'comments' => $repo->findAll(),
+        ]);
+    }
+
     #[Route('/post/{id}/comment', name: 'comment_new', methods: ['POST'])]
     public function new(Post $post, Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -22,6 +31,7 @@ class CommentController extends AbstractController
         $content = $request->request->get('content');
         if (!$content) {
             $this->addFlash('error', 'Cant be empty');
+
             return $this->redirectToRoute('app_post_show', ['id' => $post->getId()]);
         }
 
@@ -52,6 +62,7 @@ class CommentController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
+
             return $this->redirectToRoute('app_post_show', ['id' => $comment->getPost()->getId()]);
         }
 

@@ -3,51 +3,58 @@
 {% block title %}{{ post.title }}{% endblock %}
 
 {% block body %}
-    <h1>{{ post.title }}</h1>
-    <p><em>By {{ post.user.email }}</em></p>
-    <p>{{ post.content }}</p>
-
-    {% if app.user and post.user.id == app.user.id %}
-        <p>
-            <a href="{{ path('app_post_edit', {id: post.id}) }}">[Edit Post]</a>
-            <form action="{{ path('app_post_delete', {id: post.id}) }}" method="post" style="display:inline">
-                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ post.id) }}">
-                <button type="submit">[Delete Post]</button>
-            </form>
-        </p>
-    {% endif %}
-
-    <hr>
-    <h3>Leave a Comment</h3>
-
-    {% if app.user %}
-        <form action="{{ path('comment_new', {id: post.id}) }}" method="post">
-            <textarea name="content" required rows="4" cols="50" placeholder="Your comment"></textarea><br>
-            <button type="submit">Send</button>
-        </form>
-    {% else %}
-        <p><a href="{{ path('app_login') }}">Sign in</a> to leave comments.</p>
-    {% endif %}
-
-    <hr>
-    <h3>Comments:</h3>
-    <ul>
-        {% for comment in post.comments %}
-            <li>
-                <strong>{{ comment.user.email }}:</strong>
-                {{ comment.content }}
-
-                {% if app.user and comment.user.id == app.user.id %}
-                    &nbsp;
-                    <a href="{{ path('comment_edit', {id: comment.id}) }}">[Edit]</a>
-                    <form action="{{ path('comment_delete', {id: comment.id}) }}" method="post" style="display:inline">
-                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ comment.id) }}">
-                        <button type="submit">[Delete]</button>
+    <div class="col-md-8 offset-md-2">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <h1 class="fw-bold m-0">{{ post.title }}</h1>
+            {% if app.user and app.user.id == post.user.id %}
+                <div class="d-flex align-items-center flex-nowrap">
+                    <a href="{{ path('app_post_edit', {id: post.id}) }}" class="btn btn-link btn-sm p-0 me-3">Edit</a>
+                    <form action="{{ path('app_post_delete', {id: post.id}) }}" method="post" style="display:inline" onsubmit="return confirm('Delete post?')">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete_post' ~ post.id) }}">
+                        <button type="submit" class="btn btn-link btn-sm text-danger p-0">Delete</button>
                     </form>
-                {% endif %}
-            </li>
-        {% else %}
-            <li>No comments.</li>
-        {% endfor %}
-    </ul>
+                </div>
+            {% endif %}
+        </div>
+        <p class="text-muted mb-4">by {{ post.user.email }}</p>
+        <div class="small text-muted mb-3">Created: {{ post.createdAt|date('M j, Y H:i') }} <br> Updated: {{ post.updatedAt|date('M j, Y H:i') }}</div>
+        <div class="mb-5">{{ post.content|nl2br }}</div>
+
+        <div class="mb-4">
+            <h5 class="mb-2">Leave a Comment</h5>
+            {% if app.user %}
+                <form action="{{ path('comment_new', {id: post.id}) }}" method="post">
+                    <textarea name="content" class="form-control form-control-sm mb-2" rows="3" placeholder="Your comment" required>{{ app.request.request.get('content') }}</textarea>
+                    <button type="submit" class="btn btn-primary btn-sm">Post Comment</button>
+                </form>
+            {% else %}
+                <p><a href="{{ path('app_login') }}">Log in</a> to comment.</p>
+            {% endif %}
+        </div>
+
+        <h5 class="mb-2">Comments</h5>
+        <ul class="list-group list-group-flush">
+            {% for comment in post.comments %}
+                <li class="list-group-item py-2">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <strong>{{ comment.user.email }}</strong>
+                        {% if app.user and comment.user.id == app.user.id %}
+                            <div class="d-flex align-items-center flex-nowrap">
+                                <a href="{{ path('comment_edit', {id: comment.id}) }}" class="btn btn-link btn-sm p-0 me-2">Edit</a>
+                                <form action="{{ path('comment_delete', {id: comment.id}) }}" method="post" class="d-flex align-items-center m-0 p-0" onsubmit="return confirm('Delete this comment?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ comment.id) }}">
+                                    <button type="submit" class="btn btn-link btn-sm text-danger p-0 mb-0">Delete</button>
+                                </form>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="small text-muted">{{ comment.updatedAt|date('M j, Y H:i') }}</div>
+                    <div class="mt-1 small">{{ comment.content|nl2br }}</div>
+                </li>
+                {% else %}
+                    <li class="list-group-item py-2 text-center text-muted">No comments yet.</li>
+            {% endfor %}
+        </ul>
+        <a href="{{ path('app_post_index') }}" class="btn btn-link btn-sm mt-4">Back to posts</a>
+    </div>
 {% endblock %}

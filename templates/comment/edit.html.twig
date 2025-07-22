@@ -1,11 +1,22 @@
-{% block title %}Edit comment{% endblock %}
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Comment{% endblock %}
 
 {% block body %}
-    <h1>Edit comment</h1>
+<div class="col-md-8 offset-md-2">
+    <h2 class="mb-4">Edit Comment</h2>
 
     {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <button type="submit">Save</button>
-        <a href="{{ path('app_post_show', {'id': comment.post.id}) }}">Cancel</a>
+
+    <div class="mb-3">
+        {{ form_label(form.content) }}
+        {{ form_widget(form.content, {'attr': {'class': 'form-control' ~ (form.content.vars.errors|length > 0 ? ' is-invalid' : ''), 'rows': 4}}) }}
+        {{ form_errors(form.content) }}
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a href="{{ path('app_post_show', {'id': comment.post.id}) }}" class="btn btn-link ms-2">Cancel</a>
+
     {{ form_end(form) }}
+</div>
 {% endblock %}

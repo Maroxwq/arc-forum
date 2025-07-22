@@ -16,6 +16,21 @@ class PostRepository extends ServiceEntityRepository
         parent::__construct($registry, Post::class);
     }
 
+    public function findAllWithCommentCount(): array
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->select('p, COUNT(c.id) AS commentsCount')
+            ->leftJoin('p.comments', 'c')
+            ->groupBy('p.id');
+
+        return array_map(function($item) {
+            return [
+                'post' => $item[0],
+                'commentsCount' => (int) $item['commentsCount'],
+            ];
+        }, $qb->getQuery()->getResult());
+    }
+
     //    /**
     //     * @return Post[] Returns an array of Post objects
     //     */
