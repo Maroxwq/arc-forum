@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Post;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Entity\Comment;
 
 /**
  * @extends ServiceEntityRepository<Post>
@@ -19,8 +20,9 @@ class PostRepository extends ServiceEntityRepository
     public function findAllWithCommentCount(): array
     {
         $qb = $this->createQueryBuilder('p')
-            ->select('p, COUNT(c.id) AS commentsCount')
-            ->leftJoin('p.comments', 'c')
+            ->select('p, u, COUNT(c.id) AS commentsCount')
+            ->leftJoin(\App\Entity\Comment::class, 'c', 'WITH', 'c.post = p')
+            ->innerJoin('p.user', 'u')
             ->groupBy('p.id');
 
         return array_map(function($item) {
@@ -29,6 +31,34 @@ class PostRepository extends ServiceEntityRepository
                 'commentsCount' => (int) $item['commentsCount'],
             ];
         }, $qb->getQuery()->getResult());
+    }
+
+    /**
+     * @param int $id
+     * @return array{post: Post, comments: Comment[]}|null
+     */
+    public function findOneWithCommentsAndAuthors(int $id): ?array
+    {
+        $post = $this->find($id);
+        if (!$post) {
+            return null;
+        }
+
+        $comments = $this->getEntityManager()
+            ->getRepository(Comment::class)
+            ->createQueryBuilder('c')
+            ->innerJoin('c.user', 'u')
+            ->addSelect('u')
+            ->where('c.post = :post')
+            ->setParameter('post', $post)
+            ->orderBy('c.createdAt', 'ASC')
+            ->getQuery()
+            ->getResult();
+
+        return [
+            'post' => $post,
+            'comments' => $comments,
+        ];
     }
 
     //    /**

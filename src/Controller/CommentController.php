@@ -11,39 +11,34 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use App\Repository\CommentRepository;
+use App\Form\CommentForm;
 
 class CommentController extends AbstractController
 {
-    #[Route('/comments', name: 'comment_index', methods: ['GET'])]
-    public function index(CommentRepository $repo): Response
-    {
-        return $this->render('comment/index.html.twig', [
-            'comments' => $repo->findAll(),
-        ]);
-    }
-
     #[Route('/post/{id}/comment', name: 'comment_new', methods: ['POST'])]
     public function new(Post $post, Request $request, EntityManagerInterface $entityManager): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $comment = new Comment();
+        $form = $this->createForm(CommentForm::class, $comment);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $comment->setPost($post);
+            $comment->setUser($this->getUser());
 
-        $content = $request->request->get('content');
-        if (!$content) {
-            $this->addFlash('error', 'Cant be empty');
+            $entityManager->persist($comment);
+            $entityManager->flush();
 
             return $this->redirectToRoute('app_post_show', ['id' => $post->getId()]);
         }
 
-        $comment = new Comment();
-        $comment->setContent($content);
-        $comment->setPost($post);
-        $comment->setUser($this->getUser());
+        foreach ($form->getErrors(true) as $error) {
+            $this->addFlash('error', $error->getMessage());
+        }
 
-        $entityManager->persist($comment);
-        $entityManager->flush();
-
-        return $this->redirectToRoute('app_post_show', ['id' => $post->getId()]);
+        return $this->redirectToRoute('app_post_show', [
+            'id' => $post->getId(),
+        ]);
     }
 
     #[Route('/comment/{id}/edit', name: 'comment_edit', methods: ['GET','POST'])]

@@ -1,20 +1,5 @@
 {{ form_start(form) }}
-  <div class="mb-3">
-    {{ form_label(form.title) }}
-    {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
-    {{ form_errors(form.title) }}
-  </div>
-
-  <div class="mb-3">
-    {{ form_label(form.content) }}
-    {{ form_widget(form.content, {
-        'attr': {'class': 'form-control', 'rows': 6}
-      }) 
-    }}
-    {{ form_errors(form.content) }}
-  </div>
-
-  <button type="submit" class="btn btn-primary">
-    {{ button_label|default('Save') }}
-  </button>
+    {{ form_row(form.title, {row_attr: { class: 'mb-3' }}) }}
+    {{ form_row(form.content, {row_attr: { class: 'mb-3' }, attr: { rows: 6 }}) }}
+    <button type="submit" class="btn btn-primary">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}

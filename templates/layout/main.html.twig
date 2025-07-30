@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom fixed-top">
+    <div class="container">
+        <a class="navbar-brand" href="{{ path('app_tag_all') }}">ARC Forum</a>
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            {% if app.user %}
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ app.user.userIdentifier }}</a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                    <li><a class="dropdown-item text-danger" href="{{ path('app_logout') }}">Log out</a></li>
+                </ul>
+            </li>
+            {% else %}
+                <li class="nav-item"><a class="btn btn-primary btn-sm" href="{{ path('app_login') }}">Log in</a></li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+<main class="pt-5 mt-5">
+    {% block main %}{% endblock %}
+</main>
+{% endblock %}

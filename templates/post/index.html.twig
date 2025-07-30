@@ -1,8 +1,8 @@
-{% extends 'base.html.twig' %}
+{% extends 'layout/two_columns.html.twig' %}
 
 {% block title %}All Posts{% endblock %}
 
-{% block body %}
+{% block content %}
     <ul class="list-group">
         {% for item in items %}
         {% set post = item.post %}

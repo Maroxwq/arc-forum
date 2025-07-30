@@ -1,9 +1,6 @@
-{% extends 'base.html.twig' %}
-{% block title %}Add Post{% endblock %}
+{% extends 'layout/content.html.twig' %}
 
-{% block body %}
-  <div class="col-md-8 offset-md-2">
+{% block content %}
     <h2 class="mb-4">Add Post</h2>
-    {{ include('post/_form.html.twig', {form: form, button_label: 'Create'}) }}
-  </div>
+    {{ include('post/_form.html.twig', { form: form, button_label: 'Create' }) }}
 {% endblock %}
