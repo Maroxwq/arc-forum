@@ -52,7 +52,7 @@ class SecurityController extends AbstractController
             $entityManager->flush();
             $this->security->login($user);
 
-            return $this->redirectToRoute('app_post_index');
+            return $this->redirectToRoute('app_tag_all');
         }
 
         return $this->render('registration/register.html.twig', [
