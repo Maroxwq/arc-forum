@@ -9,11 +9,11 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class TagController extends AbstractController
 {
-    #[Route('/post', name: 'app_tag_all', methods: ['GET'])]
+    #[Route('/', name: 'app_tag_all', methods: ['GET'])]
     public function all(PostRepository $postRepository): Response
     {
-        return $this->render('post/index.html.twig', [
-            'items' => $postRepository->findAllWithCommentCount(),
+        return $this->render('tag/index.html.twig', [
+            'items' => $postRepository->findAllWithCommentsCount(),
         ]);
     }
 }

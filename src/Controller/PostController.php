@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Post;
 use App\Form\PostForm;
-use App\Repository\PostRepository;
+use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,7 +24,7 @@ final class PostController extends AbstractController
         $form = $this->createForm(PostForm::class, $post);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $post->setUser($this->getUser());
+            $post->setOwner($this->getUser());
             $entityManager->persist($post);
             $entityManager->flush();
 
@@ -37,18 +37,14 @@ final class PostController extends AbstractController
     }
 
     #[Route('/{id}', name: 'show', methods: ['GET'])]
-    public function show(int $id, PostRepository $postRepository): Response
+    public function show(Post $post, CommentRepository $commentRepository): Response
     {
-        $data = $postRepository->findOneWithCommentsAndAuthors($id);
-        if (!$data) {
-            throw $this->createNotFoundException('Post not found');
-        }
-
+        $comments = $commentRepository->findAllWithAuthorsByPostId($post->getId());
         $commentForm = $this->createForm(CommentForm::class);
 
         return $this->render('post/show.html.twig', [
-            'post' => $data['post'],
-            'comments' => $data['comments'],
+            'post' => $post,
+            'comments' => $comments,
             'commentForm' => $commentForm->createView(),
         ]);
     }

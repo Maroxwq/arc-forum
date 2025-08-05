@@ -16,7 +16,7 @@ services:
     App\:
         resource: '../src/'
 
-    App\Security\PostVoter:
+    App\Security\OwnerAwareVoter:
         autowire: true
         autoconfigure: true
         tags: ['security.voter']

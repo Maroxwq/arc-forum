@@ -6,20 +6,19 @@ use App\Repository\PostRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use App\Contract\OwnerAwareContract;
+use App\Entity\Trait\OwnerAwareTrait;
 
 #[ORM\Entity(repositoryClass: PostRepository::class)]
-class Post
+class Post implements OwnerAwareContract
 {
     use TimestampableEntity;
+    use OwnerAwareTrait;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
-    #[ORM\ManyToOne(inversedBy: 'posts')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
 
     #[ORM\Column(length: 64)]
     private ?string $title = null;
@@ -30,18 +29,6 @@ class Post
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): static
-    {
-        $this->user = $user;
-
-        return $this;
     }
 
     public function getTitle(): ?string
