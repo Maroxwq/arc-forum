@@ -31,7 +31,7 @@ class AppFixtures extends Fixture
         $posts = [];
         for ($i = 0; $i < 100; $i++) {
             $post = new Post();
-            $post->setUser($users[array_rand($users)]);
+            $post->setOwner($users[array_rand($users)]);
             $post->setTitle($faker->sentence(3, true));
             $post->setContent($faker->paragraphs(3, true));
             $manager->persist($post);
@@ -42,7 +42,7 @@ class AppFixtures extends Fixture
         for ($i = 0; $i < 300; $i++) {
             $comment = new Comment();
             $comment->setPost($posts[array_rand($posts)]);
-            $comment->setUser($users[array_rand($users)]);
+            $comment->setOwner($users[array_rand($users)]);
             $comment->setContent($faker->sentences(2, true));
             $manager->persist($comment);
         }
