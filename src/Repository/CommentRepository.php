@@ -23,7 +23,7 @@ class CommentRepository extends ServiceEntityRepository
     public function findAllWithAuthorsByPostId(int $postId): array
     {
         return $this->createQueryBuilder('c')
-            ->innerJoin('c.user', 'u')
+            ->innerJoin('c.owner', 'u')
             ->addSelect('u')
             ->innerJoin('c.post', 'p')
             ->where('p.id = :postId')

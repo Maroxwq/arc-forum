@@ -22,7 +22,7 @@ class PostRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('p')
             ->select('p, u, COUNT(c.id) AS commentsCount')
             ->leftJoin(\App\Entity\Comment::class, 'c', 'WITH', 'c.post = p')
-            ->innerJoin('p.user', 'u')
+            ->innerJoin('p.owner', 'u')
             ->groupBy('p.id');
 
         return array_map(function($item) {
