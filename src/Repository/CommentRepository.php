@@ -16,6 +16,23 @@ class CommentRepository extends ServiceEntityRepository
         parent::__construct($registry, Comment::class);
     }
 
+    /**
+     * @param int $postId
+     * @return Comment[]
+     */
+    public function findAllWithAuthorsByPostId(int $postId): array
+    {
+        return $this->createQueryBuilder('c')
+            ->innerJoin('c.user', 'u')
+            ->addSelect('u')
+            ->innerJoin('c.post', 'p')
+            ->where('p.id = :postId')
+            ->setParameter('postId', $postId)
+            ->orderBy('c.createdAt', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return Comment[] Returns an array of Comment objects
     //     */

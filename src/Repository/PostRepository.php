@@ -17,7 +17,7 @@ class PostRepository extends ServiceEntityRepository
         parent::__construct($registry, Post::class);
     }
 
-    public function findAllWithCommentCount(): array
+    public function findAllWithCommentsCount(): array
     {
         $qb = $this->createQueryBuilder('p')
             ->select('p, u, COUNT(c.id) AS commentsCount')
@@ -33,33 +33,6 @@ class PostRepository extends ServiceEntityRepository
         }, $qb->getQuery()->getResult());
     }
 
-    /**
-     * @param int $id
-     * @return array{post: Post, comments: Comment[]}|null
-     */
-    public function findOneWithCommentsAndAuthors(int $id): ?array
-    {
-        $post = $this->find($id);
-        if (!$post) {
-            return null;
-        }
-
-        $comments = $this->getEntityManager()
-            ->getRepository(Comment::class)
-            ->createQueryBuilder('c')
-            ->innerJoin('c.user', 'u')
-            ->addSelect('u')
-            ->where('c.post = :post')
-            ->setParameter('post', $post)
-            ->orderBy('c.createdAt', 'ASC')
-            ->getQuery()
-            ->getResult();
-
-        return [
-            'post' => $post,
-            'comments' => $comments,
-        ];
-    }
 
     //    /**
     //     * @return Post[] Returns an array of Post objects

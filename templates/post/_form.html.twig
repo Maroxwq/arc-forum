@@ -1,5 +1,5 @@
 {{ form_start(form) }}
-    {{ form_row(form.title, {row_attr: { class: 'mb-3' }}) }}
-    {{ form_row(form.content, {row_attr: { class: 'mb-3' }, attr: { rows: 6 }}) }}
+    {{ form_row(form.title) }}
+    {{ form_row(form.content) }}
     <button type="submit" class="btn btn-primary">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}

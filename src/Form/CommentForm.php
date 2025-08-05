@@ -18,7 +18,7 @@ class CommentForm extends AbstractType
                 'label' => false,
                 'attr' => [
                     'rows' => 3,
-                    'class' => 'form-control form-control-sm',
+                    'class' => 'form-control form-control-sm mb-3',
                     'placeholder' => 'Your comment',
                 ],
                 'constraints' => [

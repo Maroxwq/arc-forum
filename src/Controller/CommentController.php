@@ -9,22 +9,22 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use App\Form\CommentForm;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class CommentController extends AbstractController
 {
     #[Route('/post/{id}/comment', name: 'comment_new', methods: ['POST'])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function new(Post $post, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $comment = new Comment();
         $form = $this->createForm(CommentForm::class, $comment);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $comment->setPost($post);
-            $comment->setUser($this->getUser());
+            $comment->setOwner($this->getUser());
 
             $entityManager->persist($comment);
             $entityManager->flush();
@@ -44,15 +44,11 @@ class CommentController extends AbstractController
     #[Route('/comment/{id}/edit', name: 'comment_edit', methods: ['GET','POST'])]
     public function edit(Comment $comment, Request $request, EntityManagerInterface $entityManager): Response
     {
-        if ($comment->getUser() !== $this->getUser()) {
-            throw new AccessDeniedException();
+        if ($comment->getOwner() !== $this->getUser()) {
+            throw $this->createAccessDeniedException('Access Denied.');
         }
 
-        $form = $this->createFormBuilder($comment)
-            ->add('content', TextareaType::class, [
-                'attr' => ['rows' => 4, 'cols' => 50],
-            ])
-            ->getForm();
+        $form = $this->createForm(CommentForm::class, $comment);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -73,8 +69,8 @@ class CommentController extends AbstractController
         if (!$this->isCsrfTokenValid('delete'.$comment->getId(), $request->request->get('_token'))) {
             throw $this->createAccessDeniedException('Invalid CSRF token');
         }
-        if ($comment->getUser() !== $this->getUser()) {
-            throw new AccessDeniedException();
+        if ($comment->getOwner() !== $this->getUser()) {
+            throw $this->createAccessDeniedException('Access denied');
         }
 
         $postId = $comment->getPost()->getId();

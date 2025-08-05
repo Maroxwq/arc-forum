@@ -2,19 +2,19 @@
 
 namespace App\Security;
 
-use App\Entity\Post;
+use App\Contract\OwnerAwareContract;
 use App\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
-class PostVoter extends Voter
+class OwnerAwareVoter extends Voter
 {
     public const EDIT = 'edit';
     public const DELETE = 'delete';
 
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return in_array($attribute, [self::EDIT, self::DELETE], true) && $subject instanceof Post;
+        return in_array($attribute, [self::EDIT, self::DELETE], true) && $subject instanceof OwnerAwareContract;
     }
 
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
@@ -24,9 +24,8 @@ class PostVoter extends Voter
             return false;
         }
 
-        /** @var Post $post */
-        $post = $subject;
+        /* @var OwnerAwareContract $subject */
 
-        return match ($attribute) {self::EDIT, self::DELETE => $post->getUser()->getId() === $user->getId(), default => false};
+        return match ($attribute) {self::EDIT, self::DELETE => $subject->getOwner()->getId() === $user->getId(), default => false};
     }
 }
