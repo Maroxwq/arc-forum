@@ -6,7 +6,7 @@
     <div class="col-md-8 offset-md-2">
         <div class="d-flex justify-content-between align-items-center mb-2">
             <h1 class="fw-bold m-0">{{ post.title }}</h1>
-            {% if app.user and app.user.id == post.user.id %}
+            {% if app.user and app.user.id == post.owner.id %}
                 <div class="d-flex align-items-center flex-nowrap">
                     <a href="{{ path('app_post_edit', {id: post.id}) }}" class="btn btn-link btn-sm p-0 me-3">Edit</a>
                     <form action="{{ path('app_post_delete', {id: post.id}) }}" method="post" style="display:inline" onsubmit="return confirm('Delete post?')">
@@ -16,7 +16,7 @@
                 </div>
             {% endif %}
         </div>
-        <p class="text-muted mb-4">by {{ post.user.email }}</p>
+        <p class="text-muted mb-4">by {{ post.owner.email }}</p>
         <div class="small text-muted mb-3">Created: {{ post.createdAt|date('M j, Y H:i') }} <br> Updated: {{ post.updatedAt|date('M j, Y H:i') }}</div>
         <div class="mb-5">{{ post.content|nl2br }}</div>
 
@@ -38,8 +38,8 @@
             {% for comment in comments %}
             <li class="list-group-item py-2">
                 <div class="d-flex justify-content-between align-items-start">
-                    <strong>{{ comment.user.email }}</strong>
-                    {% if app.user and comment.user.id == app.user.id %}
+                    <strong>{{ comment.owner.email }}</strong>
+                    {% if app.user and comment.owner.id == app.user.id %}
                         <div class="d-flex align-items-center flex-nowrap">
                             <a href="{{ path('comment_edit', {id: comment.id}) }}" class="btn btn-link btn-sm p-0 me-2">Edit</a>
                             <form action="{{ path('comment_delete', {id: comment.id}) }}" method="post" class="d-flex align-items-center m-0 p-0" onsubmit="return confirm('Delete this comment?');">
