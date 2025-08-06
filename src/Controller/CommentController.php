@@ -42,14 +42,10 @@ class CommentController extends AbstractController
     }
 
     #[Route('/comment/{id}/edit', name: 'comment_edit', methods: ['GET','POST'])]
+    #[IsGranted('edit', 'comment')]
     public function edit(Comment $comment, Request $request, EntityManagerInterface $entityManager): Response
     {
-        if ($comment->getOwner() !== $this->getUser()) {
-            throw $this->createAccessDeniedException('Access Denied.');
-        }
-
         $form = $this->createForm(CommentForm::class, $comment);
-
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
@@ -64,13 +60,11 @@ class CommentController extends AbstractController
     }
 
     #[Route('/comment/{id}', name: 'comment_delete', methods: ['POST'])]
+    #[IsGranted('delete', 'comment')]
     public function delete(Comment $comment, Request $request, EntityManagerInterface $entityManager): Response
     {
         if (!$this->isCsrfTokenValid('delete'.$comment->getId(), $request->request->get('_token'))) {
             throw $this->createAccessDeniedException('Invalid CSRF token');
-        }
-        if ($comment->getOwner() !== $this->getUser()) {
-            throw $this->createAccessDeniedException('Access denied');
         }
 
         $postId = $comment->getPost()->getId();
