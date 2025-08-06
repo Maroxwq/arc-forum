@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Entity;
 
@@ -37,7 +37,7 @@ class Comment implements OwnerAwareContract
         return $this->post;
     }
 
-    public function setPost(?Post $post): static
+    public function setPost(Post $post): static
     {
         $this->post = $post;
 

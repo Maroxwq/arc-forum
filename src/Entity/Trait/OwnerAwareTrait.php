@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Entity\Trait;
 
@@ -7,7 +7,7 @@ use App\Entity\User;
 
 trait OwnerAwareTrait
 {
-    #[ORM\ManyToOne(inversedBy: 'posts')]
+    #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $owner = null;
 
@@ -16,7 +16,7 @@ trait OwnerAwareTrait
         return $this->owner;
     }
 
-    public function setOwner(?User $owner): static
+    public function setOwner(User $owner): static
     {
         $this->owner = $owner;
 
