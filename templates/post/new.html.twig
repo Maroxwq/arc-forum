@@ -1,0 +1,6 @@
+{% extends 'layout/one_column.html.twig' %}
+
+{% block content %}
+    <h2 class="mb-4">Add Post</h2>
+    {{ include('post/_form.html.twig', { form: form, button_label: 'Create' }) }}
+{% endblock %}

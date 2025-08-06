@@ -2,15 +2,15 @@
 
 namespace App\Entity;
 
-use App\Repository\PostRepository;
+use App\Repository\CommentRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use App\Contract\OwnerAwareContract;
 use App\Entity\Trait\OwnerAwareTrait;
 
-#[ORM\Entity(repositoryClass: PostRepository::class)]
-class Post implements OwnerAwareContract
+#[ORM\Entity(repositoryClass: CommentRepository::class)]
+class Comment implements OwnerAwareContract
 {
     use TimestampableEntity;
     use OwnerAwareTrait;
@@ -20,8 +20,9 @@ class Post implements OwnerAwareContract
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 64)]
-    private ?string $title = null;
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    private ?Post $post = null;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $content = null;
@@ -31,14 +32,14 @@ class Post implements OwnerAwareContract
         return $this->id;
     }
 
-    public function getTitle(): ?string
+    public function getPost(): ?Post
     {
-        return $this->title;
+        return $this->post;
     }
 
-    public function setTitle(string $title): static
+    public function setPost(Post $post): static
     {
-        $this->title = $title;
+        $this->post = $post;
 
         return $this;
     }

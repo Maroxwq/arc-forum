@@ -1,10 +1,11 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Repository;
 
 use App\Entity\Post;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Entity\Comment;
 
 /**
  * @extends ServiceEntityRepository<Post>
@@ -16,28 +17,19 @@ class PostRepository extends ServiceEntityRepository
         parent::__construct($registry, Post::class);
     }
 
-    //    /**
-    //     * @return Post[] Returns an array of Post objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('p.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function findAllWithCommentsCount(): array
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->select('p, u, COUNT(c.id) AS commentsCount')
+            ->leftJoin(Comment::class, 'c', 'WITH', 'c.post = p')
+            ->innerJoin('p.owner', 'u')
+            ->groupBy('p.id');
 
-    //    public function findOneBySomeField($value): ?Post
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        return array_map(function($item) {
+            return [
+                'post' => $item[0],
+                'commentsCount' => (int) $item['commentsCount'],
+            ];
+        }, $qb->getQuery()->getResult());
+    }
 }
