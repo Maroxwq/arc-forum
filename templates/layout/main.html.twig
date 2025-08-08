@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom fixed-top">
+    <nav class="navbar navbar-expand-lg border-bottom fixed-top bg-body-tertiary">
         <div class="container">
             <a class="navbar-brand" href="{{ path('app_tag_all') }}">ARC Forum</a>
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-2">
                 {% if app.user %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ app.user.userIdentifier }}</a>
@@ -13,13 +13,14 @@
                         </ul>
                     </li>
                 {% else %}
-                    <li class="nav-item"><a class="btn btn-primary btn-sm" href="{{ path('app_login') }}">Log in</a></li>
+                    <li class="nav-item"><a class="btn btn-outline-primary btn-sm" href="{{ path('app_register') }}">Sign Up</a></li>
+                    <li class="nav-item"><a class="btn btn-primary btn-sm" href="{{ path('app_login') }}">Sign In</a></li>
                 {% endif %}
             </ul>
         </div>
     </nav>
 
-    <main class="pt-5 mt-5">
+    <main class="flex-grow-1">
         {% block main %}{% endblock %}
     </main>
 {% endblock %}
