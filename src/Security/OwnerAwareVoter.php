@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Security;
 
@@ -9,8 +9,8 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 class OwnerAwareVoter extends Voter
 {
-    public const EDIT = 'edit';
-    public const DELETE = 'delete';
+    public const string EDIT = 'edit';
+    public const string DELETE = 'delete';
 
     protected function supports(string $attribute, mixed $subject): bool
     {

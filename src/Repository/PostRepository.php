@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Repository;
 
@@ -21,7 +21,7 @@ class PostRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('p')
             ->select('p, u, COUNT(c.id) AS commentsCount')
-            ->leftJoin(\App\Entity\Comment::class, 'c', 'WITH', 'c.post = p')
+            ->leftJoin(Comment::class, 'c', 'WITH', 'c.post = p')
             ->innerJoin('p.owner', 'u')
             ->groupBy('p.id');
 
@@ -32,30 +32,4 @@ class PostRepository extends ServiceEntityRepository
             ];
         }, $qb->getQuery()->getResult());
     }
-
-
-    //    /**
-    //     * @return Post[] Returns an array of Post objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('p.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?Post
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
 }

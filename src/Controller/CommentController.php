@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Controller;
 
@@ -9,14 +9,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use App\Form\CommentForm;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[Route(name: 'app_post_comment_')]
 class CommentController extends AbstractController
 {
-    #[Route('/post/{id}/comment', name: 'comment_new', methods: ['POST'])]
-    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    #[Route('/post/{id}/comment', name: 'new', methods: ['POST'])]
+    #[IsGranted('ROLE_USER')]
     public function new(Post $post, Request $request, EntityManagerInterface $entityManager): Response
     {
         $comment = new Comment();
@@ -28,20 +28,16 @@ class CommentController extends AbstractController
 
             $entityManager->persist($comment);
             $entityManager->flush();
-
-            return $this->redirectToRoute('app_post_show', ['id' => $post->getId()]);
+        } else {
+            foreach ($form->getErrors(true) as $error) {
+                $this->addFlash('error', $error->getMessage());
+            }
         }
 
-        foreach ($form->getErrors(true) as $error) {
-            $this->addFlash('error', $error->getMessage());
-        }
-
-        return $this->redirectToRoute('app_post_show', [
-            'id' => $post->getId(),
-        ]);
+        return $this->redirectToRoute('app_post_show', ['id' => $post->getId()]);
     }
 
-    #[Route('/comment/{id}/edit', name: 'comment_edit', methods: ['GET','POST'])]
+    #[Route('/comment/{id}/edit', name: 'edit', methods: ['GET','POST'])]
     #[IsGranted('edit', 'comment')]
     public function edit(Comment $comment, Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -53,13 +49,10 @@ class CommentController extends AbstractController
             return $this->redirectToRoute('app_post_show', ['id' => $comment->getPost()->getId()]);
         }
 
-        return $this->render('comment/edit.html.twig', [
-            'form' => $form->createView(),
-            'comment' => $comment,
-        ]);
+        return $this->render('comment/edit.html.twig', ['form' => $form->createView(),  'comment' => $comment,]);
     }
 
-    #[Route('/comment/{id}', name: 'comment_delete', methods: ['POST'])]
+    #[Route('/comment/{id}', name: 'delete', methods: ['POST'])]
     #[IsGranted('delete', 'comment')]
     public function delete(Comment $comment, Request $request, EntityManagerInterface $entityManager): Response
     {
