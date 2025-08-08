@@ -1,22 +1,25 @@
 {% extends 'layout/main.html.twig' %}
 
 {% block main %}
-    <div class="container">
+    <div class="container pt-100px">
         <div class="row">
-            <div class="col-3 mb-3">
-                <div class="sticky-top" style="top: 96px;">
+            <div class="col-3">
+                <div class="sticky-top">
                     {% if app.user %}
                         <a href="{{ path('app_post_new') }}" class="btn btn-primary w-100 mb-4">Add Post</a>
                     {% endif %}
 
                     <h6>Tags</h6>
-                    <ul class="list-group">
-                        <li class="list-group-item">example</li>
-                        <li class="list-group-item">example 123</li>
+                    <ul class="nav nav-pills flex-column">
+                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">All</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Software</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Cats & Dogs</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Nature</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#">Support</a></li>
                     </ul>
                 </div>
             </div>
-                <div class="col-9">{% block content %}{% endblock %}</div>
+            <div class="col-9">{% block content %}{% endblock %}</div>
         </div>
     </div>
 {% endblock %}

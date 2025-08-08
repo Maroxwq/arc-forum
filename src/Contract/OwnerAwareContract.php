@@ -8,5 +8,5 @@ interface OwnerAwareContract
 {
     public function getOwner(): ?User;
 
-    public function setOwner(User $user): static;
+    public function setOwner(User $owner): static;
 }

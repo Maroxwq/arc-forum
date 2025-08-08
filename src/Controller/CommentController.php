@@ -4,11 +4,12 @@ namespace App\Controller;
 
 use App\Entity\Comment;
 use App\Entity\Post;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use App\Form\CommentForm;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -24,7 +25,9 @@ class CommentController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $comment->setPost($post);
-            $comment->setOwner($this->getUser());
+            /** @var User $user */
+            $user = $this->getUser();
+            $comment->setOwner($user);
 
             $entityManager->persist($comment);
             $entityManager->flush();

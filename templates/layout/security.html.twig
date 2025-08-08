@@ -1,11 +1,9 @@
 {% extends 'layout/main.html.twig' %}
 
 {% block main %}
-    <div class="container h-100">
-        <div class="row h-100 justify-content-center align-items-center">
-            <div class="col-4">
-                {% block content %}{% endblock %}
-            </div>
+    <div class="d-flex align-items-center justify-content-center h-100">
+        <div class="w-320px">
+            {% block content %}{% endblock %}
         </div>
     </div>
 {% endblock %}
