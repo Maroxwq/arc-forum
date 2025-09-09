@@ -5,3 +5,58 @@
 .pt-100px {
     padding-top: 100px;
 }
+
+.top-100px {
+    top: 100px;
+}
+
+.list-group-item {
+    border: none;
+    background: transparent;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: #fff;
+    background-color: #6c757d;
+    text-transform: uppercase;
+}
+
+.comment-avatar {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+}
+
+.stretched-item {
+    position: relative;
+}
+.stretched-item .stretched-link {
+    z-index: 1;
+}
+
+.item-actions {
+    opacity: 0;
+    transition: opacity .15s ease-in-out;
+}
+.comment-item:hover .item-actions,
+.list-group-item:hover .item-actions {
+    opacity: 1;
+}
+
+.post-item {
+    transition: transform .12s ease, box-shadow .12s ease, background-color .12s ease;
+    border-radius: 8px;
+    padding: .75rem 1rem;
+}
+.post-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+    background-color: rgba(255,255,255,0.03);
+}
