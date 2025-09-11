@@ -24,7 +24,7 @@ class CommentForm extends AbstractType
                 'constraints' => [
                     new Length([
                         'min' => 3,
-                        'max' => 2000,
+                        'max' => 512,
                     ]),
                 ],
             ]);

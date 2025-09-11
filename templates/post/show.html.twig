@@ -3,56 +3,51 @@
 {% block title %}{{ post.title }}{% endblock %}
 
 {% block content %}
-    <div class="d-flex justify-content-between align-items-center mb-2 pt-100px">
-        <div class="d-flex align-items-start gap-3">
-            <div class="avatar" aria-hidden="true">{{ post.owner.email|first|upper }}</div>
-            <div>
-                <h1 class="fw-bold m-0">{{ post.title }}</h1>
-                <div class="small text-muted">by {{ post.owner.email }}</div>
+    <div class="two-columns-reverse pt-100px">
+        <aside class="sidebar">
+            <div class="card p-3">
+                {% if app.user %}
+                    {{ form_start(commentForm, { action: path('app_post_comment_new', {id: post.id}), method: 'POST' }) }}
+                    {% for msg in app.flashes('error') %}<div class="alert alert-danger small py-1 px-2">{{ msg }}</div>{% endfor %}
+                    {{ form_widget(commentForm.content, { attr: { class: 'form-control', rows: 3, placeholder: 'Your comment' } }) }}
+                    {{ form_errors(commentForm.content) }}
+                    <div class="d-grid mt-2"><button class="btn btn-primary reply-btn" type="submit"><i class="bi bi-reply-fill"></i> Reply</button></div>
+                    {{ form_end(commentForm) }}
+                {% else %}
+                    <a href="{{ path('app_login') }}" class="btn btn-outline-primary reply-btn"><i class="bi bi-box-arrow-in-right"></i> Sign In to reply</a>
+                {% endif %}
             </div>
-        </div>
-        <div class="text-end">
-            <span class="badge bg-primary"><i class="bi bi-chat-dots-fill"></i> {{ comments|length }}</span>
-            {% if app.user and app.user.id == post.owner.id %}
-                <div class="d-flex align-items-center flex-nowrap">
-                    {% if comments|length <= 3 %}
-                        <a href="{{ path('app_post_edit', {id: post.id}) }}" class="btn btn-link btn-sm p-0 me-3">Edit</a>
-                    {% endif %}
-                    <form action="{{ path('app_post_delete', {id: post.id}) }}" method="post" style="display:inline" onsubmit="return confirm('Delete post?')">
-                        <input type="hidden" name="_token" value="{{ csrf_token('delete_post' ~ post.id) }}">
-                        <button type="submit" class="btn btn-link btn-sm text-danger p-0">Delete</button>
-                    </form>
+        </aside>
+
+        <main class="main">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+                <div>
+                    <h1 class="post-title fw-bold m-0">{{ post.title }}</h1>
+                    <div class="small text-muted">by {{ post.owner.email }}</div>
                 </div>
-            {% endif %}
-        </div>
+
+                <div class="text-end">
+                    <span class="badge bg-primary"><i class="bi bi-chat-dots-fill"></i> {{ comments|length }}</span>
+                    <div class="item-actions mt-2{% if app.user and app.user.id == post.owner.id %} always-visible{% endif %}">
+                        {% if app.user and app.user.id == post.owner.id %}
+                            {% if comments|length <= 3 %}
+                                <a href="{{ path('app_post_edit', {id: post.id}) }}" class="btn btn-sm btn-link px-1" title="Edit" aria-label="Edit"><i class="bi bi-pencil-square"></i></a>
+                            {% endif %}
+                            <form action="{{ path('app_post_delete', {id: post.id}) }}" method="post" style="display:inline" onsubmit="return confirm('Delete post?')">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete_post' ~ post.id) }}">
+                                <button type="submit" class="btn btn-sm btn-link px-1" title="Delete" aria-label="Delete"><i class="bi bi-trash-fill"></i></button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4">{{ post.content|nl2br }}</div>
+            <div class="small text-muted mb-3">Created: {{ post.createdAt|date('M j, Y H:i') }} <br> Updated: {{ post.updatedAt|date('M j, Y H:i') }}</div>
+            <h5 class="mb-2">Comments</h5>
+            <div class="d-grid gap-2">{% include 'comment/list.html.twig' with { comments: comments } %}</div>
+            <a href="{{ path('app_tag_all') }}" class="btn btn-link btn-sm mt-4"><i class="bi bi-chevron-left"></i> Back to posts</a>
+        </main>
     </div>
-
-    <div class="mb-3">{{ post.content|nl2br }}</div>
-
-    <div class="small text-muted mb-3">Created: {{ post.createdAt|date('M j, Y H:i') }} <br> Updated: {{ post.updatedAt|date('M j, Y H:i') }}</div>
-
-    <div class="mb-4">
-        <h5 class="mb-2">Leave a Comment</h5>
-        {% if app.user %}
-            {{ form_start(commentForm, { action: path('app_post_comment_new', {id: post.id}), method: 'POST', attr: { class: 'mb-2' }}) }}
-                {% for msg in app.flashes('error') %}<div class="alert alert-danger small py-1 px-2">{{ msg }}</div>{% endfor %}
-                {{ form_widget(commentForm.content) }}
-                {{ form_errors(commentForm.content) }} </br>
-                <button type="submit" class="btn btn-primary btn-sm">Post Comment</button>
-            {{ form_end(commentForm) }}
-        {% else %}
-            <p><a href="{{ path('app_login') }}">Log in</a> to comment.</p>
-        {% endif %}
-    </div>
-
-    <h5 class="mb-2">Comments</h5>
-    <ul class="list-group list-group-flush">
-        {% for comment in comments %}
-            {{ include('comment/comment.html.twig', { comment: comment }) }}
-        {% else %}
-            <li class="list-group-item py-2 text-center text-muted">No comments yet.</li>
-        {% endfor %}
-    </ul>
-
-    <a href="{{ path('app_tag_all') }}" class="btn btn-link btn-sm mt-4">Back to posts</a>
 {% endblock %}
+
