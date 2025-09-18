@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <nav class="navbar navbar-expand-lg border-bottom fixed-top bg-body-tertiary">
+    <header class="navbar navbar-expand-lg border-bottom sticky-top bg-body-tertiary">
         <div class="container">
             <a class="navbar-brand" href="{{ path('app_tag_all') }}">ARC Forum</a>
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-2">
@@ -18,11 +18,11 @@
                 {% endif %}
             </ul>
         </div>
-    </nav>
+    </header>
 
     <main class="flex-grow-1">
         {% block main %}{% endblock %}
     </main>
 
-    <footer class="mt-5 py-3 text-center">© ARC Forum 2025.</footer>
+    <footer class="py-3 text-center">© ARC Forum 2025.</footer>
 {% endblock %}

@@ -6,7 +6,36 @@
     <div class="post-list">
         {% for item in items %}
             {% set post = item.post %}
-            {{ include('post/preview.html.twig', { post: post, commentsCount: item.commentsCount }) }}
+            <div class="post-row d-flex gap-3 p-3 position-relative align-items-stretch rounded">
+                <div class="pt-1 flex-shrink-0"><div class="avatar bg-secondary d-inline-flex align-items-center justify-content-center text-white fw-bold">{{ post.owner.email|first|upper }}</div></div>
+
+                <div class="flex-grow-1 min-w-0 d-flex flex-column">
+                    <div class="d-flex w-100 align-items-start">
+                        <div class="me-3 min-w-0">
+                            <h4 id="post-{{ post.id }}-title" class="mb-1 text-truncate"><a href="{{ path('app_post_show', { id: post.id }) }}" class="text-decoration-none text-body d-block">{{ post.title }}</a></h4>
+                            <p class="text-secondary small mb-1 text-truncate">{{ post.owner.email }}</p>
+                        </div>
+                        <div class="text-secondary small text-nowrap ms-auto flex-shrink-0">{{ post.updatedAt|date('M j, Y') }}</div>
+                    </div>
+                    <div class="post-excerpt small text-muted mt-2">{{ post.content|striptags|trim|slice(0,100) }}{% if post.content|length > 100 %}…{% endif %}</div>
+                </div>
+
+                <div class="d-flex flex-column justify-content-between align-items-end w-9rem">
+                    <div><span class="badge bg-primary"><i class="bi bi-chat-dots-fill"></i> {{ item.commentsCount }}</span></div>
+                    <div class="post-actions d-flex mt-auto">
+                        {% if app.user and app.user.id == post.owner.id %}
+                            {% if item.commentsCount <= 3 %}<a href="{{ path('app_post_edit', { id: post.id }) }}" class="btn btn-sm btn-primary me-2" title="Edit"><i class="bi bi-pencil"></i></a>{% endif %}
+                            <form action="{{ path('app_post_delete', { id: post.id }) }}" method="post" style="display:inline" onsubmit="return confirm('Delete post?')">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete_post' ~ post.id) }}">
+                                <button type="submit" class="btn btn-sm btn-danger" title="Delete"><i class="bi bi-trash"></i></button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <a href="{{ path('app_post_show', { id: post.id }) }}" class="stretched-link" aria-label="Open post {{ post.title }}"></a>
+            </div>
+
         {% else %}
             <div class="text-center text-muted">No posts yet.</div>
         {% endfor %}
