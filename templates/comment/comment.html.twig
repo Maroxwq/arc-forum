@@ -1,24 +1,25 @@
-<article class="comment-item d-flex gap-3 align-items-start" id="comment-{{ comment.id }}" aria-labelledby="comment-{{ comment.id }}-author">
-    <div class="avatar bg-secondary d-inline-flex align-items-center justify-content-center text-white fw-bold flex-shrink-0" style="width:44px;height:44px;font-size:18px;" aria-hidden="true">{{ comment.owner.email|first|upper }}</div>
+<article class="comment-item d-flex align-items-start" id="comment-{{ comment.id }}" aria-labelledby="comment-{{ comment.id }}-author">
+    <div class="avatar bg-secondary d-inline-flex align-items-center justify-content-center text-white fw-bold me-3" aria-hidden="true">{{ comment.owner.email|first|upper }}</div>
     <div class="flex-grow-1 min-w-0">
         <div>
             <strong id="comment-{{ comment.id }}-author">{{ comment.owner.email }}</strong>
             <div class="mt-2 small" role="article">{{ comment.content|nl2br }}</div>
         </div>
-    </div>
 
-    <div class="d-flex flex-column align-items-end ms-2" style="min-width:8rem;">
-        <div class="small text-muted">{{ comment.updatedAt|date('M j, Y H:i') }}</div>
-        <div class="item-actions mt-auto">
+        <div class="actions-row">
             {% if app.user and comment.owner.id == app.user.id %}
-                <div class="d-flex gap-2">
-                    <a href="{{ path('app_post_comment_edit', {id: comment.id}) }}" class="btn btn-sm btn-primary" title="Edit comment" aria-label="Edit comment"><i class="bi bi-pencil-square"></i></a>
-                    <form action="{{ path('app_post_comment_delete', {id: comment.id}) }}" method="post" style="display:inline" onsubmit="return confirm('Delete this comment?');">
-                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ comment.id) }}">
-                        <button type="submit" class="btn btn-sm btn-danger" title="Delete comment" aria-label="Delete comment"><i class="bi bi-trash-fill"></i></button>
-                    </form>
+                <div class="item-actions">
+                    <div class="d-flex">
+                        <a href="{{ path('app_post_comment_edit', {id: comment.id}) }}" class="btn btn-sm btn-primary me-2" title="Edit comment" aria-label="Edit comment"><i class="bi bi-pencil-square"></i></a>
+                        <form action="{{ path('app_post_comment_delete', {id: comment.id}) }}" method="post" style="display:inline" onsubmit="return confirm('Delete this comment?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ comment.id) }}">
+                            <button type="submit" class="btn btn-sm btn-danger" title="Delete comment" aria-label="Delete comment"><i class="bi bi-trash-fill"></i></button>
+                        </form>
+                    </div>
                 </div>
             {% endif %}
         </div>
     </div>
+
+    <div class="comment-meta-top small text-muted">{{ comment.updatedAt|date('M j, Y H:i') }}</div>
 </article>
