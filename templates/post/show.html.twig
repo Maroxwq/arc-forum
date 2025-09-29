@@ -6,9 +6,9 @@
 {% block sidebar %}
     <div class="p-3">
         {% if app.user %}
-            <a href="#comment-form" class="btn btn-primary w-100 reply-btn"><i class="bi bi-reply-fill"></i> Reply</a>
+            <a href="#comment-form" class="btn btn-primary w-100"><i class="bi bi-reply-fill"></i> Reply</a>
         {% else %}
-            <a href="{{ path('app_login') }}" class="btn btn-outline-primary reply-btn w-100"><i class="bi bi-box-arrow-in-right"></i> Sign In to reply</a>
+            <a href="{{ path('app_login') }}" class="btn btn-outline-primary w-100"><i class="bi bi-box-arrow-in-right"></i> Sign In to reply</a>
         {% endif %}
     </div>
 {% endblock %}
