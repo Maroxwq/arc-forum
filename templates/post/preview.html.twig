@@ -1,6 +1,6 @@
 <div class="position-relative">
     <div class="post-meta d-flex align-items-start gap-3">
-        <div class="avatar bg-secondary text-light fw-bold">{{ post.owner.email|first|upper }}</div>
+        <twig:Avatar :email="post.owner.email"/>
         <div class="min-w-0">
             <h3 class="post-title h5 m-0"><a id="post-{{ post.id }}-title" href="{{ path('app_post_show', { id: post.id }) }}" class="text-decoration-none text-body d-block stretched-link">{{ post.title }}</a></h3>
             <div class="small text-secondary">{{ post.updatedAt|date('M j, Y') }} · by {{ post.owner.email }}</div>

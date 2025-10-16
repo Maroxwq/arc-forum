@@ -1,5 +1,5 @@
 <article class="post-row d-flex align-items-start p-3 u-transition rounded gap-3" id="comment-{{ comment.id }}">
-    <div><div class="avatar bg-secondary text-light fw-bold">{{ comment.owner.email|first|upper }}</div></div>
+    <div><twig:Avatar :email="comment.owner.email"/></div>
     <div class="flex-grow-1">
         <div class="d-flex justify-content-between align-items-start">
             <div class="fw-semibold">{{ comment.owner.email }}</div>

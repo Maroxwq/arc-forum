@@ -15,7 +15,7 @@
 
 {% block content %}
     <div class="d-flex mb-3 gap-3 post-header align-items-start">
-        <div><div class="avatar bg-secondary text-light fw-bold">{{ post.owner.email|first|upper }}</div></div>
+        <div><twig:Avatar :email="post.owner.email"/></div>
         <div class="flex-grow-1">
             <h3 class="post-title fw-bold m-0">{{ post.title }}</h3>
             <div class="small text-secondary">by {{ post.owner.email }}</div>
