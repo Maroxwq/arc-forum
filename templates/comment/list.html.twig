@@ -1,10 +1,8 @@
 {% if comments|length > 0 %}
     <div class="comments-section">
-        <div class="d-flex flex-column gap-2">
-            {% for comment in comments %}
-                {{ include('comment/comment.html.twig', { comment: comment }) }}
-            {% endfor %}
-        </div>
+        {% for comment in comments %}
+            {{ include('comment/comment.html.twig', { comment: comment }) }}
+        {% endfor %}
     </div>
 {% else %}
     <div class="text-center text-muted py-3">No comments yet.</div>

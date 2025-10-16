@@ -1,9 +1,22 @@
+:root {
+    --main-top: 82px;
+    --item-hover-color: #FFFFFF11;
+}
+
+[data-bs-theme="light"] {
+    --item-hover-color: #00000010;
+}
+
 .container {
     max-width: 992px !important;
 }
 
 .sidebar {
-    top: 82px;
+    top: var(--main-top);
+}
+
+.site-main {
+    margin-top: var(--main-top);
 }
 
 .w-320px {
@@ -22,44 +35,18 @@
 }
 
 .u-transition {
-    transition: opacity .3s ease, background-color .3s ease, transform .3s ease;
+    transition: .3s ease;
 }
 
-.item-actions, .post-actions {
-    display: flex;
-    gap: .5rem;
+.list-actions {
+    z-index: 2;
     opacity: 0;
 }
 
 .post-row:hover {
-    background-color: rgba(255,255,255,0.05);
+    background-color: var(--item-hover-color);
 }
 
-.post-row .stretched-link {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-}
-
-.comment-item {
-    padding-top: .5rem;
-    padding-bottom: 1rem;
-}
-
-.post-row:hover .item-actions, .post-row:hover .post-actions, .post-header:hover .item-actions, .comment-item:hover .item-actions {
+.post-row:hover .list-actions, .post-header:hover .list-actions {
     opacity: 1;
-}
-
-.post-row, .comment-item {
-    padding: .75rem;
-    border-radius: .5rem;
-}
-
-.site-main {
-    padding-top: 82px;
-}
-
-.btn-dropdown-plain {
-    position: relative;
-    z-index: 2;
 }

@@ -7,26 +7,26 @@
         {% for item in items %}
             {% set post = item.post %}
             <div class="post-row d-flex p-3 position-relative rounded gap-3 u-transition">
-                <div class="pt-1 flex-shrink-0"><div class="avatar bg-secondary text-white fw-bold">{{ post.owner.email|first|upper }}</div></div>
+                <div class="pt-1 flex-shrink-0"><div class="avatar bg-secondary text-light fw-bold">{{ post.owner.email|first|upper }}</div></div>
 
                 <div class="flex-grow-1">
                     <div class="d-flex justify-content-between align-items-start">
                         <div class="me-3">
-                            <h4 id="post-{{ post.id }}-title" class="mb-1"><a href="{{ path('app_post_show', { id: post.id }) }}" class="text-decoration-none text-body d-block">{{ post.title }}</a></h4>
+                            <h4 id="post-{{ post.id }}-title" class="mb-1"><a href="{{ path('app_post_show', { id: post.id }) }}" class="text-decoration-none text-body d-block stretched-link">{{ post.title }}</a></h4>
                             <p class="text-secondary small mb-1">{{ post.owner.email }}</p>
                         </div>
                         <div class="text-secondary small text-nowrap">{{ post.updatedAt|date('M j, Y') }}</div>
                     </div>
 
-                    <div class="small text-muted mt-2">{{ post.content|striptags|trim|slice(0,100) }}{% if post.content|length > 100 %}…{% endif %}</div>
+                    <div class="small text-secondary mt-2">{{ post.content|striptags|trim|slice(0,100) }}{% if post.content|length > 100 %}…{% endif %}</div>
                 </div>
 
-                <div class="d-flex flex-column justify-content-between align-items-end">
+                <div class="vstack justify-content-between align-items-end">
                     <div><span class="badge bg-primary"><i class="bi bi-chat-dots-fill me-1"></i> {{ item.commentsCount }}</span></div>
-                    <div class="post-actions mt-auto u-transition">
+                    <div class="list-actions mt-auto u-transition">
                         {% if app.user and app.user.id == post.owner.id %}
                             <div class="dropdown">
-                                <button class="btn btn-sm border-0 p-0 fs-5 btn-dropdown-plain" type="button" data-bs-toggle="dropdown">⋯</button>
+                                <button class="btn btn-sm border-0 p-0 fs-5" type="button" data-bs-toggle="dropdown">⋯</button>
                                 <ul class="dropdown-menu dropdown-menu-end">
                                     {% if item.commentsCount <= 3 %}
                                         <li><a class="dropdown-item" href="{{ path('app_post_edit', { id: post.id }) }}"><i class="bi bi-pencil me-2"></i>Edit</a></li>
@@ -42,11 +42,9 @@
                         {% endif %}
                     </div>
                 </div>
-
-                <a href="{{ path('app_post_show', { id: post.id }) }}" class="stretched-link"></a>
             </div>
         {% else %}
-            <div class="text-center text-muted">No posts yet.</div>
+            <div class="text-center text-secondary">No posts yet.</div>
         {% endfor %}
     </div>
 {% endblock %}

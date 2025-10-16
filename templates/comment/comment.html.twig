@@ -1,18 +1,18 @@
-<article class="comment-item d-flex align-items-start" id="comment-{{ comment.id }}">
-    <div class="me-3"><div class="avatar bg-secondary text-white fw-bold">{{ comment.owner.email|first|upper }}</div></div>
+<article class="post-row d-flex align-items-start p-3 u-transition rounded gap-3" id="comment-{{ comment.id }}">
+    <div><div class="avatar bg-secondary text-light fw-bold">{{ comment.owner.email|first|upper }}</div></div>
     <div class="flex-grow-1">
         <div class="d-flex justify-content-between align-items-start">
             <div class="fw-semibold">{{ comment.owner.email }}</div>
-            <div class="small text-muted">{{ comment.updatedAt|date('M j, Y H:i') }}</div>
+            <div class="small text-secondary">{{ comment.updatedAt|date('M j, Y H:i') }}</div>
         </div>
 
         <div class="mt-2 small">{{ comment.content|nl2br }}</div>
 
         <div class="mt-2 d-flex justify-content-end">
-            <div class="item-actions u-transition">
+            <div class="list-actions u-transition">
                 {% if app.user and comment.owner.id == app.user.id %}
                     <div class="dropdown">
-                        <button class="btn border-0 p-0 fs-5 btn-dropdown-plain" type="button" data-bs-toggle="dropdown">⋯</button>
+                        <button class="btn border-0 p-0 fs-5" type="button" data-bs-toggle="dropdown">⋯</button>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="{{ path('app_post_comment_edit', {id: comment.id}) }}"><i class="bi bi-pencil-square me-2"></i>Edit</a></li>
                             <li>
