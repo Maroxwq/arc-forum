@@ -1,9 +1,9 @@
 {% extends 'layout/security.html.twig' %}
 
-{% block title %}Log in{% endblock %}
+{% block title %}Sign In{% endblock %}
 
 {% block content %}
-    <h2 class="mb-4">Log in</h2>
+    <h2 class="mb-4">Sign In</h2>
 
     {% if error %}
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
@@ -22,8 +22,8 @@
 
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-        <button class="btn btn-primary w-100" type="submit">Sign in</button>
+        <button class="btn btn-primary w-100" type="submit">Sign In</button>
     </form>
 
-    <p class="mt-3 text-center">Don’t have an account? <a href="{{ path('app_register') }}">Register</a></p>
+    <p class="mt-3 text-center">Don’t have an account? <a href="{{ path('app_register') }}">Sign Up</a></p>
 {% endblock %}

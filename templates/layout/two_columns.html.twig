@@ -6,18 +6,7 @@
             <div class="col-3 {% block col_order %}{% endblock %}">
                 <aside class="sticky-top sidebar">
                     {% block sidebar %}
-                        {% if app.user %}
-                            <a href="{{ path('app_post_new') }}" class="btn btn-success w-100">Create Post</a>
-                            <hr>
-                        {% endif %}
-
-                        <ul class="nav nav-pills flex-column">
-                            <li class="nav-item"><a class="nav-link active" href="#">All</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#">Software</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#">Cats & Dogs</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#">Nature</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#">Support</a></li>
-                        </ul>
+                        {% include 'layout/_sidebar.html.twig' %}
                     {% endblock %}
                 </aside>
             </div>

@@ -16,7 +16,7 @@ use LogicException;
 
 class SecurityController extends AbstractController
 {
-    public function __construct(private Security $security) {}
+    public function __construct(private readonly Security $security) {}
 
     #[Route(path: '/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response

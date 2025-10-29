@@ -4,48 +4,15 @@
 {% block col_order %}order-1{% endblock %}
 
 {% block sidebar %}
-    <div class="p-3">
-        {% if app.user %}
-            <a href="#comment-form" class="btn btn-primary w-100"><i class="bi bi-reply-fill me-1"></i>Reply</a>
-        {% else %}
-            <a href="{{ path('app_login') }}" class="btn btn-outline-primary w-100"><i class="bi bi-box-arrow-in-right me-1"></i>Sign In to reply</a>
-        {% endif %}
-    </div>
+    {% if app.user %}
+        <a href="#comment-form" class="btn btn-primary w-100"><i class="bi bi-reply-fill me-1"></i>Reply</a>
+    {% else %}
+        <a href="{{ path('app_login') }}" class="btn btn-outline-primary w-100"><i class="bi bi-box-arrow-in-right me-1"></i>Sign In to Reply</a>
+    {% endif %}
 {% endblock %}
 
 {% block content %}
-    <div class="d-flex mb-3 gap-3 post-header align-items-start">
-        <div><twig:Avatar :email="post.owner.email"/></div>
-        <div class="flex-grow-1">
-            <h3 class="post-title fw-bold m-0">{{ post.title }}</h3>
-            <div class="small text-secondary">by {{ post.owner.email }}</div>
-        </div>
-
-        <div class="flex-shrink-0 vstack align-items-end">
-            <div class="small text-secondary">{{ post.updatedAt|date('M j, Y H:i') }}</div>
-            <div class="list-actions mt-2 u-transition">
-                {% if app.user and app.user.id == post.owner.id %}
-                    <div class="dropdown">
-                        <button class="btn btn-sm border-0 p-0 fs-5" type="button" data-bs-toggle="dropdown">⋯</button>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            {% if comments|length <= 3 %}
-                                <li><a class="dropdown-item" href="{{ path('app_post_edit', {id: post.id}) }}"><i class="bi bi-pencil me-2"></i>Edit</a></li>
-                            {% endif %}
-                            <li>
-                                <form action="{{ path('app_post_delete', {id: post.id}) }}" method="post" onsubmit="return confirm('Delete post?')">
-                                    <input type="hidden" name="_token" value="{{ csrf_token('delete_post' ~ post.id) }}">
-                                    <button type="submit" class="dropdown-item"><i class="bi bi-trash me-2"></i>Delete</button>
-                                </form>
-                            </li>
-                        </ul>
-                    </div>
-                {% endif %}
-            </div>
-        </div>
-    </div>
-
-    <div class="mb-4 small text-break">{{ post.content|nl2br }}</div>
-    <hr class="my-3">
+    {% include('post/_post_item.html.twig') %}
     {% include 'comment/list.html.twig' with { comments: comments } %}
 
     {% if app.user %}

@@ -1,6 +1,7 @@
 :root {
     --main-top: 82px;
     --item-hover-color: #FFFFFF11;
+    --cont-max-width: 992px;
 }
 
 [data-bs-theme="light"] {
@@ -8,14 +9,14 @@
 }
 
 .container {
-    max-width: 992px !important;
+    max-width: var(--cont-max-width) !important;
 }
 
 .sidebar {
     top: var(--main-top);
 }
 
-.site-main {
+main {
     margin-top: var(--main-top);
 }
 
@@ -38,7 +39,7 @@
     transition: .3s ease;
 }
 
-.list-actions {
+.item-actions {
     z-index: 2;
     opacity: 0;
 }
@@ -47,6 +48,6 @@
     background-color: var(--item-hover-color);
 }
 
-.post-row:hover .list-actions, .post-header:hover .list-actions {
+.post-row:hover .item-actions, .post-header:hover .item-actions {
     opacity: 1;
 }

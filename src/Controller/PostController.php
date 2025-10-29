@@ -53,12 +53,7 @@ final class PostController extends AbstractController
     #[IsGranted('edit', 'post')]
     public function edit(Request $request, Post $post, EntityManagerInterface $entityManager, CommentRepository $commentRepository): Response
     {
-        if ($commentRepository->count(['post' => $post]) > 3) {
-            $this->addFlash('error', 'You cannot edit a post that has more than 3 comments.');
-
-            return $this->redirectToRoute('app_post_show', ['id' => $post->getId()]);
-        }
-
+        $this->denyAccessUnlessGranted('post_edit', $post);
         $form = $this->createForm(PostForm::class, $post);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

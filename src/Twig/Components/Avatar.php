@@ -2,10 +2,11 @@
 
 namespace App\Twig\Components;
 
+use App\Entity\User;
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 
 #[AsTwigComponent('Avatar')]
 class Avatar
 {
-    public string $email;
+    public User $user;
 }
