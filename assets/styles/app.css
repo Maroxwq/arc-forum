@@ -1,7 +1,7 @@
 :root {
     --main-top: 82px;
     --item-hover-color: #FFFFFF11;
-    --cont-max-width: 992px;
+    --container-max-width: 992px;
 }
 
 [data-bs-theme="light"] {
@@ -9,7 +9,7 @@
 }
 
 .container {
-    max-width: var(--cont-max-width) !important;
+    max-width: var(--container-max-width) !important;
 }
 
 .sidebar {

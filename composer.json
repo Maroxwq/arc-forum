@@ -10,7 +10,7 @@
         "doctrine/dbal": "^3.10.3",
         "doctrine/doctrine-bundle": "^2.18.0",
         "doctrine/doctrine-migrations-bundle": "^3.5.0",
-        "doctrine/orm": "^3.5.2",
+        "doctrine/orm": "^3.5.3",
         "phpdocumentor/reflection-docblock": "^5.6.3",
         "phpstan/phpdoc-parser": "^2.3",
         "stof/doctrine-extensions-bundle": "^1.14",
@@ -35,19 +35,19 @@
         "symfony/runtime": "7.3.*",
         "symfony/security-bundle": "7.3.*",
         "symfony/serializer": "7.3.*",
-        "symfony/stimulus-bundle": "^2.30",
+        "symfony/stimulus-bundle": "^2.31",
         "symfony/string": "7.3.*",
         "symfony/translation": "7.3.*",
         "symfony/twig-bundle": "7.3.*",
-        "symfony/ux-turbo": "^2.30",
-        "symfony/ux-twig-component": "^2.30",
+        "symfony/ux-turbo": "^2.31",
+        "symfony/ux-twig-component": "^2.31",
         "symfony/validator": "7.3.*",
         "symfony/web-link": "7.3.*",
         "symfony/yaml": "7.3.*",
         "twbs/bootstrap": "5.3.6",
         "twbs/bootstrap-icons": "^1.13.1",
-        "twig/extra-bundle": "^2.12|^3.21",
-        "twig/twig": "^2.12|^3.21.1"
+        "twig/extra-bundle": "^2.12|^3.22",
+        "twig/twig": "^2.12|^3.22.0"
     },
     "config": {
         "allow-plugins": {
@@ -101,9 +101,9 @@
         }
     },
     "require-dev": {
-        "doctrine/doctrine-fixtures-bundle": "^4.2",
+        "doctrine/doctrine-fixtures-bundle": "^4.3",
         "fakerphp/faker": "^1.24.1",
-        "phpunit/phpunit": "^12.4.1",
+        "phpunit/phpunit": "^12.4.2",
         "symfony/browser-kit": "7.3.*",
         "symfony/css-selector": "7.3.*",
         "symfony/debug-bundle": "7.3.*",

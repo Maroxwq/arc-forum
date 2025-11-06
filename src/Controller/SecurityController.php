@@ -12,7 +12,6 @@ use App\Form\RegistrationForm;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Bundle\SecurityBundle\Security;
-use LogicException;
 
 class SecurityController extends AbstractController
 {
@@ -33,7 +32,7 @@ class SecurityController extends AbstractController
     #[Route(path: '/logout', name: 'app_logout')]
     public function logout(): void
     {
-        throw new LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+        throw new \LogicException()('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
 
     #[Route('/register', name: 'app_register')]

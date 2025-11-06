@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use App\Form\CommentForm;
+use App\Entity\User;
+use Symfony\Component\Form\FormInterface;
 
 #[Route(path: '/post', name: 'app_post_')]
 final class PostController extends AbstractController
@@ -22,18 +24,11 @@ final class PostController extends AbstractController
     {
         $post = new Post();
         $form = $this->createForm(PostForm::class, $post);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $post->setOwner($this->getUser());
-            $entityManager->persist($post);
-            $entityManager->flush();
-
+        if ($this->processForm($request, $form, $post, $entityManager)) {
             return $this->redirectToRoute('app_tag_all');
         }
 
-        return $this->render('post/new.html.twig', [
-            'form' => $form->createView(),
-        ]);
+        return $this->render('post/new.html.twig', ['form' => $form->createView(),]);
     }
 
     #[Route('/{id}', name: 'show', methods: ['GET'])]
@@ -51,20 +46,14 @@ final class PostController extends AbstractController
 
     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
     #[IsGranted('edit', 'post')]
-    public function edit(Request $request, Post $post, EntityManagerInterface $entityManager, CommentRepository $commentRepository): Response
+    public function edit(Request $request, Post $post, EntityManagerInterface $entityManager): Response
     {
-        $this->denyAccessUnlessGranted('post_edit', $post);
         $form = $this->createForm(PostForm::class, $post);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
+        if ($this->processForm($request, $form, $post, $entityManager)) {
             return $this->redirectToRoute('app_post_show', ['id' => $post->getId()]);
         }
 
-        return $this->render('post/edit.html.twig', [
-            'form' => $form->createView(),
-        ]);
+        return $this->render('post/edit.html.twig', ['form' => $form->createView(),]);
     }
 
     #[Route('/{id}/delete', name: 'delete', methods: ['POST'])]
@@ -77,5 +66,25 @@ final class PostController extends AbstractController
         }
 
         return $this->redirectToRoute('app_tag_all');
+    }
+
+    private function processForm(Request $request, FormInterface $form, Post $post, EntityManagerInterface $entityManager): bool
+    {
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            if (null === $post->getId()) {
+                /** @var User|null $user */
+                $user = $this->getUser();
+                $post->setOwner($user);
+                $entityManager->persist($post);
+            }
+
+            $entityManager->flush();
+
+            return true;
+        }
+
+        return false;
     }
 }

@@ -23,12 +23,7 @@
                         {% if item.commentsCount <= 3 %}
                             <li><a class="dropdown-item" href="{{ path('app_post_edit', { id: post.id }) }}"><i class="bi bi-pencil me-2"></i>Edit</a></li>
                         {% endif %}
-                        <li>
-                            <form action="{{ path('app_post_delete', { id: post.id }) }}" method="post" onsubmit="return confirm('Delete post?')">
-                                <input type="hidden" name="_token" value="{{ csrf_token('delete_post' ~ post.id) }}">
-                                <button type="submit" class="dropdown-item"><i class="bi bi-trash me-2"></i>Delete</button>
-                            </form>
-                        </li>
+                        <li>{% include 'post/_delete_form.html.twig' with {action: path('app_post_delete', { id: post.id }), token_intent: 'delete_post', id: post.id} only %}</li>
                     </ul>
                 </div>
             {% endif %}

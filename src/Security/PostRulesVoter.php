@@ -10,7 +10,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 final class PostRulesVoter extends Voter
 {
-    public const EDIT = 'post_edit';
+    public const string EDIT = 'edit';
 
     public function __construct(private CommentRepository $comments) {}
 
@@ -28,11 +28,6 @@ final class PostRulesVoter extends Voter
 
         /** @var Post $post */
         $post = $subject;
-
-        $owner = $post->getOwner();
-        if (!$owner || $owner->getId() !== $user->getId()) {
-            return false;
-        }
 
         return $this->comments->count(['post' => $post]) <= 3;
     }
