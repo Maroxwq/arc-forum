@@ -13,25 +13,13 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use App\Form\CommentForm;
 use App\Entity\User;
-use Symfony\Component\Form\FormInterface;
 
 #[Route(path: '/post', name: 'app_post_')]
 final class PostController extends AbstractController
 {
-    #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
-    #[IsGranted('ROLE_USER')]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $post = new Post();
-        $form = $this->createForm(PostForm::class, $post);
-        if ($this->processForm($request, $form, $post, $entityManager)) {
-            return $this->redirectToRoute('app_tag_all');
-        }
+    public function  __construct(private readonly EntityManagerInterface $en) {}
 
-        return $this->render('post/new.html.twig', ['form' => $form->createView(),]);
-    }
-
-    #[Route('/{id}', name: 'show', methods: ['GET'])]
+    #[Route('/{id}', name: 'show', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function show(Post $post, CommentRepository $commentRepository): Response
     {
         $comments = $commentRepository->findAllWithAuthorsByPostId($post->getId());
@@ -44,32 +32,35 @@ final class PostController extends AbstractController
         ]);
     }
 
+    #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_USER')]
+    public function new(Request $request): Response
+    {
+        return $this->processForm($request, new Post());
+    }
+
     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
     #[IsGranted('edit', 'post')]
-    public function edit(Request $request, Post $post, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Post $post): Response
     {
-        $form = $this->createForm(PostForm::class, $post);
-        if ($this->processForm($request, $form, $post, $entityManager)) {
-            return $this->redirectToRoute('app_post_show', ['id' => $post->getId()]);
-        }
-
-        return $this->render('post/edit.html.twig', ['form' => $form->createView(),]);
+        return $this->processForm($request, $post);
     }
 
     #[Route('/{id}/delete', name: 'delete', methods: ['POST'])]
     #[IsGranted('delete', 'post')]
-    public function delete(Request $request, Post $post, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, Post $post): Response
     {
         if ($this->isCsrfTokenValid('delete_post'.$post->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($post);
-            $entityManager->flush();
+            $this->en->remove($post);
+            $this->en->flush();
         }
 
         return $this->redirectToRoute('app_tag_all');
     }
 
-    private function processForm(Request $request, FormInterface $form, Post $post, EntityManagerInterface $entityManager): bool
+    private function processForm(Request $request, Post $post): Response
     {
+        $form = $this->createForm(PostForm::class, $post);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -77,14 +68,14 @@ final class PostController extends AbstractController
                 /** @var User|null $user */
                 $user = $this->getUser();
                 $post->setOwner($user);
-                $entityManager->persist($post);
+                $this->en->persist($post);
             }
 
-            $entityManager->flush();
+            $this->en->flush();
 
-            return true;
+            return $this->redirectToRoute('app_post_show', ['id' => $post->getId()]);
         }
 
-        return false;
+        return $this->render('post/form.html.twig', ['form' => $form->createView(), 'post' => $post,]);
     }
 }

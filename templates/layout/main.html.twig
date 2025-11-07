@@ -1,15 +1,15 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    {% block header %}
-        <header class="navbar navbar-expand-lg border-bottom fixed-top bg-body-tertiary">{% include 'layout/_header.html.twig' %}</header>
-    {% endblock %}
+    <header class="navbar navbar-expand-lg border-bottom fixed-top bg-body-tertiary">
+        {% block header %}{% include 'layout/_header.html.twig' %}{% endblock %}
+    </header>
 
     <main class="flex-grow-1">
         {% block main %}{% endblock %}
     </main>
 
-    {% block footer %}
-        <footer class="py-3 text-center">{% include 'layout/_footer.html.twig' %}</footer>
-    {% endblock %}
+    <footer class="py-3 text-center">
+        {% block footer %}{% include 'layout/_footer.html.twig' %}{% endblock %}
+    </footer>
 {% endblock %}

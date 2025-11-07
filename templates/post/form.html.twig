@@ -1,0 +1,12 @@
+{% extends 'layout/security.html.twig' %}
+
+{% block content %}
+    {% set label = post.id ? 'Edit' : 'Create' %}
+    <h2 class="mb-4">{{ label }} Post</h2>
+    {{ form_start(form) }}
+    {{ form_row(form.title) }}
+    {{ form_row(form.content) }}
+    <button type="submit" class="btn btn-primary">{{ label }}</button>
+    {{ form_end(form) }}
+{% endblock %}
+

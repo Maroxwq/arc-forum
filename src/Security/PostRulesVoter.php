@@ -21,11 +21,6 @@ final class PostRulesVoter extends Voter
 
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
     {
-        $user = $token->getUser();
-        if (!$user instanceof User) {
-            return false;
-        }
-
         /** @var Post $post */
         $post = $subject;
 

@@ -16,13 +16,16 @@
     {% include 'comment/list.html.twig' with { comments: comments } %}
 
     {% if app.user %}
-        <div id="comment-form" class="mt-4">
-            {{ form_start(commentForm, { action: path('app_post_comment_new', {id: post.id}), method: 'POST' }) }}
-            {% for msg in app.flashes('error') %}<div class="alert alert-danger small py-1 px-2">{{ msg }}</div>{% endfor %}
-            {{ form_widget(commentForm.content, {attr: {class: 'form-control', rows: 3, placeholder: 'Your comment'}}) }}
-            {{ form_errors(commentForm.content) }}
-            <div class="mt-2 text-end"><button class="btn btn-primary reply-btn" type="submit"><i class="bi bi-reply-fill me-1"></i>Reply</button></div>
-            {{ form_end(commentForm) }}
+        <div class="hstack gap-3 align-items-start mt-4">
+            <div><twig:Avatar :user="app.user"/></div>
+            <div id="comment-form" class="flex-grow-1">
+                {{ form_start(commentForm, { action: path('app_post_comment_new', {id: post.id}), method: 'POST' }) }}
+                {% for msg in app.flashes('error') %}<div class="alert alert-danger small py-1 px-2">{{ msg }}</div>{% endfor %}
+                {{ form_widget(commentForm.content, {attr: {class: 'form-control', rows: 3, placeholder: 'Your comment'}}) }}
+                {{ form_errors(commentForm.content) }}
+                <div class="mt-2 text-end"><button class="btn btn-primary reply-btn" type="submit"><i class="bi bi-reply-fill me-1"></i>Reply</button></div>
+                {{ form_end(commentForm) }}
+            </div>
         </div>
     {% endif %}
 {% endblock %}
