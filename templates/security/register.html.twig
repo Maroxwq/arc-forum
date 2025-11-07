@@ -1,9 +1,9 @@
 {% extends 'layout/security.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Sign Up{% endblock %}
 
 {% block content %}
-    <h2 class="mb-4">Register</h2>
+    <h2 class="mb-4">Sign Up</h2>
 
     {{ form_start(registrationForm) }}
         <div class="mb-3">
@@ -18,8 +18,8 @@
             {{ form_errors(registrationForm.plainPassword) }}
         </div>
 
-        <button type="submit" class="btn btn-primary w-100">Register</button>
+        <button type="submit" class="btn btn-primary w-100">Sign Up</button>
     {{ form_end(registrationForm) }}
 
-    <p class="mt-3 text-center">Already have an account? <a href="{{ path('app_login') }}">Sign in</a></p>
+    <p class="mt-3 text-center">Already have an account? <a href="{{ path('app_login') }}">Sign In</a></p>
 {% endblock %}

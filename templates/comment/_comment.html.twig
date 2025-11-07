@@ -1,0 +1,25 @@
+<article class="post-header d-flex align-items-start py-3 u-transition gap-3" id="comment-{{ comment.id }}">
+    <div><twig:Avatar :user="comment.owner"/></div>
+    <div class="flex-grow-1">
+        <div class="d-flex justify-content-between align-items-start">
+            <div class="fw-semibold">{{ comment.owner.email }}</div>
+            <div class="small text-secondary">{{ comment.updatedAt|date('M j, Y H:i') }}</div>
+        </div>
+
+        <div class="mt-2 small">{{ comment.content|nl2br }}</div>
+
+        <div class="mt-2 d-flex justify-content-end">
+            <div class="item-actions u-transition">
+                {% if app.user and comment.owner.id == app.user.id %}
+                    <div class="dropdown">
+                        <button class="btn border-0 p-0 fs-5" type="button" data-bs-toggle="dropdown">⋯</button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="{{ path('app_post_comment_edit', {id: comment.id}) }}"><i class="bi bi-pencil-square me-2"></i>Edit</a></li>
+                            <li>{% include 'common/_delete_form.html.twig' with {action: path('app_post_comment_delete', { id: comment.id }), token_intent: 'delete', id: comment.id} only %}</li>
+                        </ul>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</article>

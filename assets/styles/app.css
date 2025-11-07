@@ -1,7 +1,53 @@
+:root {
+    --main-top: 82px;
+    --item-hover-color: #FFFFFF11;
+    --container-max-width: 992px;
+}
+
+[data-bs-theme="light"] {
+    --item-hover-color: #00000010;
+}
+
+.container {
+    max-width: var(--container-max-width) !important;
+}
+
+.sidebar {
+    top: var(--main-top);
+}
+
+main {
+    margin-top: var(--main-top);
+}
+
 .w-320px {
     width: 320px;
 }
 
-.pt-100px {
-    padding-top: 100px;
+.avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.u-transition {
+    transition: .3s ease;
+}
+
+.item-actions {
+    z-index: 2;
+    opacity: 0;
+}
+
+.post-row:hover {
+    background-color: var(--item-hover-color);
+}
+
+.post-row:hover .item-actions, .post-header:hover .item-actions {
+    opacity: 1;
 }
