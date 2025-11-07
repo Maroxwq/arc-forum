@@ -17,7 +17,7 @@ use App\Entity\User;
 #[Route(path: '/post', name: 'app_post_')]
 final class PostController extends AbstractController
 {
-    public function  __construct(private readonly EntityManagerInterface $en) {}
+    public function  __construct(private readonly EntityManagerInterface $em) {}
 
     #[Route('/{id}', name: 'show', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function show(Post $post, CommentRepository $commentRepository): Response
@@ -51,8 +51,8 @@ final class PostController extends AbstractController
     public function delete(Request $request, Post $post): Response
     {
         if ($this->isCsrfTokenValid('delete_post'.$post->getId(), $request->request->get('_token'))) {
-            $this->en->remove($post);
-            $this->en->flush();
+            $this->em->remove($post);
+            $this->em->flush();
         }
 
         return $this->redirectToRoute('app_tag_all');
@@ -68,10 +68,10 @@ final class PostController extends AbstractController
                 /** @var User|null $user */
                 $user = $this->getUser();
                 $post->setOwner($user);
-                $this->en->persist($post);
+                $this->em->persist($post);
             }
 
-            $this->en->flush();
+            $this->em->flush();
 
             return $this->redirectToRoute('app_post_show', ['id' => $post->getId()]);
         }
