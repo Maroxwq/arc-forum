@@ -12,7 +12,7 @@
                 <div class="dropdown">
                     <button class="btn btn-sm border-0 p-0 fs-5" type="button" data-bs-toggle="dropdown">⋯</button>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        {% if comments|length <= 3 %}
+                        {% if comments|length < 4 %}
                             <li><a class="dropdown-item" href="{{ path('app_post_edit', {id: post.id}) }}"><i class="bi bi-pencil me-2"></i>Edit</a></li>
                         {% endif %}
                         <li>{% include 'common/_delete_form.html.twig' with {action: path('app_post_delete', { id: post.id }), token_intent: 'delete_post', id: post.id} only %}</li>

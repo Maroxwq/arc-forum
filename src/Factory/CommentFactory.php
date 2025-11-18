@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Factory;
 
@@ -15,7 +15,7 @@ final class CommentFactory extends PersistentObjectFactory
     protected function defaults(): array|callable
     {
         return [
-            'content' => self::faker()->sentences(random_int(1, 3), true),
+            'content' => self::faker()->sentences(random_int(1, 20), true),
             'owner' => UserFactory::randomOrCreate(),
         ];
     }

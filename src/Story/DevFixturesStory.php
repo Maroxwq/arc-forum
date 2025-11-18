@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Story;
 
@@ -14,30 +14,27 @@ final class DevFixturesStory extends Story
 {
     public function build(): void
     {
-        $f = FakerFactory::create();
-        $power = UserFactory::createMany(8);
-        $active = UserFactory::createMany(30);
-        $regular = UserFactory::createMany(50);
-        $rare = UserFactory::createMany(40);
-        $all = array_merge($power, $active, $regular, $rare);
+        $faker = FakerFactory::create();
+        $users = UserFactory::createMany(65);
+        $activeUsers = array_slice($users, 0, 10);
+        $regularUsers = array_slice($users, 10, 40);
+        $rareUsers = array_slice($users, 50, 15);
+        $ownersPool = array_merge($activeUsers, $activeUsers, $regularUsers, $rareUsers);
+        $posts = PostFactory::createMany(80, fn() => ['owner' => $faker->randomElement($ownersPool)]);
 
-        for ($i = 0; $i < 100; $i++) {
-            $r = random_int(1,100);
-            $owner = $r <= 12 ? $f->randomElement($power) : ($r <= 40 ? $f->randomElement($active) : ($r <= 88 ? $f->randomElement($regular) : $f->randomElement($rare)));
-            $post = PostFactory::createOne(['owner' => $owner]);
-            $c = random_int(1,100);
-            $comments = $c <= 5 ? random_int(30,80) : ($c <= 30 ? random_int(6,25) : random_int(0,5));
-            if ($comments) {
-                CommentFactory::createMany($comments, fn() => [
+        foreach ($posts as $post) {
+            $chance = $faker->numberBetween(1, 100);
+            $commentCount = $chance <= 5 ? $faker->numberBetween(30, 50) : ($chance <= 30 ? $faker->numberBetween(6, 20) : $faker->numberBetween(0, 5));
+            if ($commentCount > 0) {
+                CommentFactory::createMany($commentCount, fn() => [
                     'post' => $post,
-                    'owner' => $f->randomElement($all),
-                    'content' => $f->sentences(random_int(1,3), true),
+                    'owner' => $faker->randomElement($users),
                 ]);
             }
         }
 
-        foreach (UserFactory::createMany(4) as $s) {
-            PostFactory::createMany(random_int(8,20), ['owner' => $s]);
+        foreach (UserFactory::createMany(2) as $superUser) {
+            PostFactory::createMany($faker->numberBetween(6, 12), ['owner' => $superUser]);
         }
     }
 }
