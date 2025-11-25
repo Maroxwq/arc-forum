@@ -15,26 +15,19 @@ final class DevFixturesStory extends Story
     public function build(): void
     {
         $faker = FakerFactory::create();
-        $users = UserFactory::createMany(65);
+        // create users, 50 total, 10 active and 40 inactive
+        $users = UserFactory::createMany(50);
         $activeUsers = array_slice($users, 0, 10);
-        $regularUsers = array_slice($users, 10, 40);
-        $rareUsers = array_slice($users, 50, 15);
-        $ownersPool = array_merge($activeUsers, $activeUsers, $regularUsers, $rareUsers);
-        $posts = PostFactory::createMany(80, fn() => ['owner' => $faker->randomElement($ownersPool)]);
+        $inactiveUsers = array_slice($users, 10, 40);
+        // duplicates active users to increase chance they own posts
+        $ownersPool = array_merge($activeUsers, $activeUsers, $inactiveUsers);
+        // create 40 posts, each owned by a random user from the ownersPool
+        $posts = PostFactory::createMany(40, fn() => ['owner' => $faker->randomElement($ownersPool)]);
 
-        foreach ($posts as $post) {
-            $chance = $faker->numberBetween(1, 100);
-            $commentCount = $chance <= 5 ? $faker->numberBetween(30, 50) : ($chance <= 30 ? $faker->numberBetween(6, 20) : $faker->numberBetween(0, 5));
-            if ($commentCount > 0) {
-                CommentFactory::createMany($commentCount, fn() => [
-                    'post' => $post,
-                    'owner' => $faker->randomElement($users),
-                ]);
-            }
-        }
-
-        foreach (UserFactory::createMany(2) as $superUser) {
-            PostFactory::createMany($faker->numberBetween(6, 12), ['owner' => $superUser]);
-        }
+        // create 200 comments with random post and owner
+        CommentFactory::createMany(200, fn() => [
+            'post' => $faker->randomElement($posts),
+            'owner' => $faker->randomElement($users),
+        ]);
     }
 }

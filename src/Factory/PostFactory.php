@@ -14,11 +14,8 @@ final class PostFactory extends PersistentObjectFactory
 
     protected function defaults(): array|callable
     {
-        $rawTitle = self::faker()->text(64);
-        $title = mb_substr(trim(ucfirst($rawTitle)), 0, 64);
-
         return [
-            'title' => $title,
+            'title' => ucfirst(self::faker()->text(64)),
             'content' => self::faker()->paragraphs(random_int(2, 6), true),
             'owner' => UserFactory::randomOrCreate(),
         ];
