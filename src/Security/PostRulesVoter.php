@@ -3,7 +3,6 @@
 namespace App\Security;
 
 use App\Entity\Post;
-use App\Entity\User;
 use App\Repository\CommentRepository;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -24,6 +23,6 @@ final class PostRulesVoter extends Voter
         /** @var Post $post */
         $post = $subject;
 
-        return $this->comments->count(['post' => $post]) <= 3;
+        return $this->comments->count(['post' => $post]) < 4;
     }
 }
