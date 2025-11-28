@@ -23,7 +23,8 @@ class PostRepository extends ServiceEntityRepository
             ->select('p, u, COUNT(c.id) AS commentsCount')
             ->leftJoin(Comment::class, 'c', 'WITH', 'c.post = p')
             ->innerJoin('p.owner', 'u')
-            ->groupBy('p.id');
+            ->groupBy('p.id')
+            ->orderBy('commentsCount', 'desc');
 
         return array_map(function($item) {
             return [

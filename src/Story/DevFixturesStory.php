@@ -14,20 +14,25 @@ final class DevFixturesStory extends Story
 {
     public function build(): void
     {
-        $faker = FakerFactory::create();
-        // create users, 50 total, 10 active and 40 inactive
-        $users = UserFactory::createMany(50);
-        $activeUsers = array_slice($users, 0, 10);
-        $inactiveUsers = array_slice($users, 10, 40);
-        // duplicates active users to increase chance they own posts
-        $ownersPool = array_merge($activeUsers, $activeUsers, $inactiveUsers);
-        // create 40 posts, each owned by a random user from the ownersPool
-        $posts = PostFactory::createMany(40, fn() => ['owner' => $faker->randomElement($ownersPool)]);
-
-        // create 200 comments with random post and owner
-        CommentFactory::createMany(200, fn() => [
-            'post' => $faker->randomElement($posts),
-            'owner' => $faker->randomElement($users),
+        $users = UserFactory::createMany(20);
+        $getRandomUser = $this->listRandomizer($users, 20);
+        $posts = PostFactory::createMany(100, fn() => ['owner' => $getRandomUser()]);
+        $getRandomPost = $this->listRandomizer($posts, 10);
+        CommentFactory::createMany(600, fn() => [
+            'post' => $getRandomPost(),
+            'owner' => $getRandomUser(),
         ]);
+    }
+
+    private function listRandomizer(array $elements, int $percentActive): \Closure
+    {
+        $faker = FakerFactory::create();
+        $elementsQty = count($elements);
+        $activeQty = (int) round($elementsQty * ($percentActive / 100));
+        $elementsActive = array_slice($elements, 0, $activeQty);
+        $elementsInactive = array_slice($elements, $activeQty, $elementsQty - $activeQty);
+        $elementsGroups = [$elementsActive, $elementsInactive];
+
+        return fn() => $faker->randomElement($faker->randomElement($elementsGroups));
     }
 }

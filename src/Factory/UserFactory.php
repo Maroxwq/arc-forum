@@ -26,11 +26,8 @@ final class UserFactory extends PersistentObjectFactory
     protected function initialize(): static
     {
         return $this
-            ->afterInstantiate(function(User $user): void {
-                $plain = $user->getPassword();
-                if ($plain) {
-                    $user->setPassword($this->passwordHasher->hashPassword($user, $plain));
-                }
-            });
+            ->afterInstantiate(fn(User $user) => $user->setPassword(
+                $this->passwordHasher->hashPassword($user, $user->getPassword())
+            ));
     }
 }
