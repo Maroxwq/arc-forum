@@ -1,0 +1,20 @@
+<div class="modal" data-confirm-target="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete</h5>
+                <button type="button" class="btn-close" data-action="confirm#close"></button>
+            </div>
+
+            <div class="modal-body"><p class="mb-0">Are you sure you want to delete this item?</p></div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-action="confirm#close">Cancel</button>
+                <form method="post" data-confirm-target="form">
+                    <input type="hidden" name="_token" data-confirm-target="token">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

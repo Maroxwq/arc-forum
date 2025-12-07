@@ -1,4 +1,8 @@
-<form id="d{{ id }}" method="post" action="{{ action }}">
-    <input type="hidden" name="_token" value="{{ csrf_token((token_intent|default('delete')) ~ id) }}">
-</form>
-<button type="button" class="dropdown-item" data-controller="confirm" data-action="confirm#open" data-confirm-form-id="d{{ id }}"><i class="bi bi-trash me-2"></i>Delete</button>
+<button
+    type="button"
+    class="dropdown-item"
+    data-action="confirm#open"
+    data-confirm-url="{{ action }}"
+    data-confirm-token="{{ csrf_token((token_intent|default('delete')) ~ id) }}">
+    <i class="bi bi-trash me-2"></i>Delete
+</button>

@@ -1,14 +1,22 @@
 import { Controller } from "@hotwired/stimulus";
 import { Modal } from "bootstrap";
 
-export default class extends Controller{
-    open(e){
-        e.preventDefault();
-        const fid = e.currentTarget.dataset.confirmFormId;
-        const f = document.getElementById(fid);
-        if(!f) return;
-        const bs = new Modal(document.getElementById('confirm-modal'));
-        bs.show();
-        document.getElementById('confirm-ok').addEventListener('click', ()=>{ f.submit(); bs.hide() }, { once:true });
+export default class extends Controller {
+    static targets = ["dialog", "form", "token"];
+
+    connect() {
+        this.modal = new Modal(this.dialogTarget);
+    }
+
+    open(event) {
+        const btn = event.currentTarget;
+        this.formTarget.action = btn.dataset.confirmUrl;
+        this.tokenTarget.value = btn.dataset.confirmToken;
+
+        this.modal.show();
+    }
+
+    close() {
+        this.modal?.hide();
     }
 }
