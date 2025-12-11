@@ -10,5 +10,5 @@
         {% block importmap %}{{ importmap('app') }}{% endblock %}
     {% endblock %}
 </head>
-<body class="h-100 vstack">{% block body %}{% endblock %}</body>
+<body class="h-100 vstack" data-controller="confirm">{% block body %}{% endblock %} {% include 'common/_confirm_modal.html.twig' %}</body>
 </html>
